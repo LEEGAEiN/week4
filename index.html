@@ -1,0 +1,301 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<title></title>
+
+    <style>
+
+        html,body {width: 100%; height: 100%; overflow:hidden;
+        }
+
+        body {background: lightgrey; font-family: Helvetica;
+        }
+
+        button {border: none; background: none;
+        }
+
+
+        .stage {
+            position: absolute;
+            left:17%;
+            top:17%;
+            width: min(1368px, 92vw);
+            height: min(720px, 88vh);
+
+        }
+
+
+
+        .player-area {
+            position: absolute;
+
+            left: 0;
+            top: 0;
+
+            width: 60%;
+            height: 100%;
+        }
+
+        .vinyl {
+            position: absolute;
+            width: 87%;
+            left: 17%;
+            top:-8%;
+            z-index: 1;
+
+            animation: spin 4s linear infinite;
+            animation-play-state: paused;
+        }
+
+/*음악재생 중 회전*/
+        .vinyl.is-playing {
+            animation-play-state: running;
+        }
+
+
+        .cover-button {
+            position: absolute;
+            width: 90%;
+            aspect-ratio: 1 / 1;
+            right: 50%;
+            top: -10%;
+            z-index: 2;
+        }
+
+        .cover-button img {
+            display: block;
+
+            width: 100%;
+            height: 100%;
+        }
+
+
+        .track-title {
+            position: absolute;
+            top: 93%;
+            left: 9%;
+            font-size: 24px;
+            letter-spacing: 1.2px;
+        }
+
+
+        .sound-area {
+            position: absolute;
+            left: 76%;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            padding: 0;
+        }
+
+        .sound-button {
+        	padding: 10%;
+            display: flex;
+            width: 100%;
+            height: 30%;
+        }
+
+
+
+        @keyframes spin {
+            from {transform: rotate(0deg);
+            }
+
+            to {transform: rotate(360deg);
+            }
+        }
+
+
+
+
+    </style>
+</head>
+
+
+<body>
+
+	<audio id="snd" src="Billie_Jean.mp3"></audio>
+    <audio id="heeheeSnd" src="HeeHee.mp3"></audio>
+    <audio id="aaowSnd" src="Aaow.mp3"></audio>
+    <audio id="hoooSnd" src="Hooo.mp3"></audio>
+
+    <main class="stage">
+
+        <section class="player-area">
+
+            	<img class="vinyl" id="vinyl" src="VINYL.png">
+
+            	<button class="cover-button" id="coverButton" type="button"> 
+            	<img src="cover.png">
+            </button>
+
+            <h1 class="track-title">
+                Click to play &lt;Bille Jean&gt;
+            </h1>
+
+        </section>
+
+
+        <section class="sound-area">
+            <button class="sound-button" id="heeheeButton" type="button">
+                <img src="HeeHee.png" alt="HeeHee">
+			</button>
+
+
+            <button class="sound-button" id="aaowButton" type="button">
+                <img src="Aaow.png" alt="Aaow">
+            </button>
+
+
+            <button class="sound-button" id="hoooButton" type="button">
+                <img src="Hooo.png" alt="Hooo">
+            </button>
+
+
+        </section>
+
+    </main>
+
+    <script>
+
+        let state = "off";
+        let heeheeState = "off";
+        let aaowState = "off";
+        let hoooState = "off";
+
+        let snd = document.getElementById("snd");
+        let heeheeSnd = document.getElementById("heeheeSnd");
+        let aaowSnd = document.getElementById("aaowSnd");
+        let hoooSnd = document.getElementById("hoooSnd");
+
+        let cover = document.getElementById("coverButton");
+        let vinyl = document.getElementById("vinyl");
+
+        let heehee = document.getElementById("heeheeButton");
+        let aaow = document.getElementById("aaowButton");
+        let hooo = document.getElementById("hoooButton");
+
+
+
+
+        function stopOthers(except) {
+
+            if (except !== snd) {
+                snd.pause();
+                snd.currentTime = 0;
+                state = "off";
+            }
+
+            if (except !== heeheeSnd) {
+                heeheeSnd.pause();
+                heeheeSnd.currentTime = 0;
+                heeheeState = "off";
+            }
+
+            if (except !== aaowSnd) {
+                aaowSnd.pause();
+                aaowSnd.currentTime = 0;
+                aaowState = "off";
+            }
+
+            if (except !== hoooSnd) {
+                hoooSnd.pause();
+                hoooSnd.currentTime = 0;
+                hoooState = "off";
+            }
+
+            vinyl.classList.remove("is-playing");
+        }
+
+
+
+        cover.onclick = function() {
+
+            if (state == "off") {
+                stopOthers(snd);
+                snd.play();
+                state = "on";
+                vinyl.classList.add("is-playing");
+
+            } else if (state == "on") {
+                snd.pause();
+                state = "off";
+                vinyl.classList.remove("is-playing");
+            }
+        };
+
+
+
+        heehee.onclick = function() {
+
+            if (heeheeState == "off") {
+                heeheeSnd.currentTime = 0;
+                heeheeSnd.play();
+                heeheeState = "on";
+
+            } else if (heeheeState == "on") {
+                heeheeSnd.pause();
+                heeheeState = "off";
+            }
+        };
+
+        aaow.onclick = function() {
+
+            if (aaowState == "off") {
+                aaowSnd.currentTime = 0;
+                aaowSnd.play();
+                aaowState = "on";
+
+            } else if (aaowState == "on") {
+                aaowSnd.pause();
+                aaowState = "off";
+            }
+        };
+
+        hooo.onclick = function() {
+
+            if (hoooState == "off") {
+                hoooSnd.currentTime = 0;
+                hoooSnd.play();
+                hoooState = "on";
+
+            } else if (hoooState == "on") {
+                hoooSnd.pause();
+                hoooState = "off";
+            }
+        };
+
+
+
+/*음악초기화*/
+
+        snd.onended = function() {
+            state = "off";
+            vinyl.classList.remove("is-playing");
+        };
+
+
+        heeheeSnd.onended = function() {
+            heeheeState = "off";
+        };
+
+
+        aaowSnd.onended = function() {
+            aaowState = "off";
+        };
+
+
+        hoooSnd.onended = function() {
+            hoooState = "off";
+        };
+
+
+    </script>
+
+</body>
+
+</html>
